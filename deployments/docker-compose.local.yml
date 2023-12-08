@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+  api:
+    build: 
+      context: .
+      dockerfile: ./build/Dockerfile.dev
+    restart: unless-stopped
+    ports:
+    - 8080:8080
+    - 4000:4000
+    volumes:
+    - ./:/app
