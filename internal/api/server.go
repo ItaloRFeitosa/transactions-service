@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/italorfeitosa/transactions-service/internal/api/response"
 	"github.com/italorfeitosa/transactions-service/internal/config"
 	"github.com/italorfeitosa/transactions-service/pkg/logger"
 	"github.com/italorfeitosa/transactions-service/pkg/middleware"
@@ -21,9 +20,12 @@ func ListenServer(container *config.Container) func(context.Context) error {
 	engine.Use(middleware.RequestID)
 	engine.Use(middleware.Logger)
 
-	engine.GET("/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, response.Data(gin.H{"ok": true}))
-	})
+	container.Handlers.Health.Register(engine)
+	routerv1 := engine.Group("/api/v1")
+	container.Handlers.Transaction.Register(routerv1)
+	container.Handlers.Account.Register(routerv1)
+
+	engine.Static("/swagger", "./api/swagger")
 
 	srv := &http.Server{
 		Addr:    container.Env.ServerAddr(),

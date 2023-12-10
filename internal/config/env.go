@@ -12,20 +12,18 @@ type Env struct {
 	LogLevel string
 }
 
-func newEnv() *Env {
-	e := new(Env)
+func provideEnv(c *Container) {
+	c.Env = new(Env)
 
-	e.Port = "8080"
+	c.Env.Port = "8080"
 	if v := os.Getenv("PORT"); v != "" {
-		e.Port = v
+		c.Env.Port = v
 	}
 
-	e.LogLevel = slog.LevelInfo.String()
+	c.Env.LogLevel = slog.LevelInfo.String()
 	if v := os.Getenv("LOG_LEVEL"); v != "" {
-		e.LogLevel = v
+		c.Env.LogLevel = v
 	}
-
-	return e
 }
 
 // ServerAddr returns a string on format of ":<PORT>". E. g ":8080"

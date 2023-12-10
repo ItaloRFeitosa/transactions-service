@@ -1,0 +1,418 @@
+basePath: /
+consumes:
+    - application/json
+definitions:
+    Account:
+        properties:
+            account_id:
+                description: Account ID, identifies account
+                example: 6543
+                format: int64
+                type: integer
+                x-go-name: AccountID
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            document_number:
+                description: Document Number, should be valid for given document_type
+                example: "62558363042"
+                type: string
+                x-go-name: DocumentNumber
+            document_type:
+                description: Document Type, it can be CPF, CNPJ or NINO
+                example: CPF
+                type: string
+                x-go-name: DocumentType
+            updated_at:
+                format: date-time
+                type: string
+                x-go-name: UpdatedAt
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    AccountResponse:
+        properties:
+            data:
+                $ref: '#/definitions/Account'
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    Error:
+        properties:
+            code:
+                type: string
+                x-go-name: Code
+            details:
+                items:
+                    type: string
+                type: array
+                x-go-name: Details
+            message:
+                type: string
+                x-go-name: Message
+            type:
+                type: string
+                x-go-name: Type
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/pkg/errs
+    ErrorResponse:
+        properties:
+            error:
+                $ref: '#/definitions/Error'
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    Health:
+        properties:
+            success:
+                type: boolean
+                x-go-name: Success
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    HealthResponse:
+        properties:
+            data:
+                $ref: '#/definitions/Health'
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    OpenAccountRequest:
+        properties:
+            document_number:
+                description: Document Number, should be valid for given document_type
+                example: "62558363042"
+                type: string
+                x-go-name: DocumentNumber
+            document_type:
+                description: Document Type, it can be CPF, CNPJ or NINO
+                example: CPF
+                type: string
+                x-go-name: DocumentType
+        required:
+            - document_type
+            - document_number
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    SaveTransactionRequest:
+        properties:
+            account_id:
+                description: Account ID
+                example: 6541
+                format: int64
+                type: integer
+                x-go-name: AccountID
+            amount:
+                description: Amount in cents must be positive when OperationTypeID == 4, otherwise is negative
+                example: -20000
+                format: int64
+                type: integer
+                x-go-name: Amount
+            operation_type_id:
+                description: 'Operation Type ID: 1 (Purchase) - 2 (Purchase In Installments) - 3 (Withdraw) - 4(Payment)'
+                example: 1
+                format: int64
+                type: integer
+                x-go-name: OperationTypeID
+        required:
+            - account_id
+            - operation_type_id
+            - amount
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    Transaction:
+        properties:
+            account_id:
+                format: int64
+                type: integer
+                x-go-name: AccountID
+            amount:
+                format: int64
+                type: integer
+                x-go-name: Amount
+            created_at:
+                format: date-time
+                type: string
+                x-go-name: CreatedAt
+            operation_type_id:
+                format: int64
+                type: integer
+                x-go-name: OperationTypeID
+            transaction_id:
+                format: int64
+                type: integer
+                x-go-name: TransactionID
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+    TransactionResponse:
+        properties:
+            data:
+                $ref: '#/definitions/Transaction'
+        type: object
+        x-go-package: github.com/italorfeitosa/transactions-service/api/model
+host: localhost:8080
+info:
+    description: '# Application to manage transactions'
+    termsOfService: there are no TOS at this moment, use at your own risk we take no responsibility
+    title: Transactions API Service.
+    version: 0.0.0
+paths:
+    /api/v1/accounts:
+        post:
+            consumes:
+                - application/json
+            description: Open Account
+            operationId: openAccount
+            parameters:
+                - in: body
+                  name: Open Account Body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/OpenAccountRequest'
+                    type: object
+            produces:
+                - application/json
+            responses:
+                "201":
+                    description: AccountResponse
+                    schema:
+                        $ref: '#/definitions/AccountResponse'
+                "400":
+                    $ref: '#/responses/OpenAccountValidationError'
+                "422":
+                    $ref: '#/responses/OpenAccountBusinessRuleError'
+                "500":
+                    $ref: '#/responses/InternalServerError'
+            tags:
+                - accounts
+    /api/v1/accounts/{accountID}:
+        get:
+            description: Get Account
+            operationId: getAccount
+            parameters:
+                - in: path
+                  name: accountID
+                  required: true
+                  type: string
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: AccountResponse
+                    schema:
+                        $ref: '#/definitions/AccountResponse'
+                "404":
+                    $ref: '#/responses/AccountNotFoundResponse'
+                "500":
+                    $ref: '#/responses/InternalServerError'
+            tags:
+                - accounts
+    /api/v1/transactions:
+        post:
+            consumes:
+                - application/json
+            description: Save Transaction
+            operationId: saveTransaction
+            parameters:
+                - in: body
+                  name: Save Transaction Body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/SaveTransactionRequest'
+                    type: object
+            produces:
+                - application/json
+            responses:
+                "201":
+                    description: TransactionResponse
+                    schema:
+                        $ref: '#/definitions/TransactionResponse'
+                "400":
+                    $ref: '#/responses/SaveTransactionValidationError'
+                "422":
+                    $ref: '#/responses/SaveTransactionBusinessRuleError'
+                "500":
+                    $ref: '#/responses/InternalServerError'
+            tags:
+                - transactions
+    /health:
+        get:
+            description: Health Endpoint
+            operationId: getHealth
+            produces:
+                - application/json
+            responses:
+                "200":
+                    description: HealthResponse
+                    schema:
+                        $ref: '#/definitions/HealthResponse'
+                "500":
+                    description: ErrorResponse
+                    schema:
+                        $ref: '#/definitions/ErrorResponse'
+            tags:
+                - health
+produces:
+    - application/json
+responses:
+    AccountNotFoundResponse:
+        description: ""
+        schema:
+            properties:
+                error:
+                    properties:
+                        code:
+                            description: account_not_found
+                            example: account_not_found
+                            type: string
+                            x-go-name: Code
+                        message:
+                            description: the error message
+                            example: could not found account with id '2154'
+                            type: string
+                            x-go-name: Message
+                        type:
+                            description: not_found
+                            example: not_found
+                            type: string
+                            x-go-name: Type
+                    required:
+                        - type
+                        - code
+                        - message
+                    type: object
+                    x-go-name: Error
+            type: object
+    InternalServerError:
+        description: ""
+        schema:
+            properties:
+                error:
+                    properties:
+                        message:
+                            description: The validation message
+                            example: something went wrong, contact support for further details.
+                            type: string
+                            x-go-name: Message
+                    required:
+                        - message
+                    type: object
+                    x-go-name: Error
+            type: object
+    OpenAccountBusinessRuleError:
+        description: ""
+        schema:
+            properties:
+                error:
+                    example:
+                        code: document_not_allowed
+                        message: document type 'SSN' not allowed
+                        type: business_rule
+                    properties:
+                        code:
+                            description: document_not_allowed | invalid_document_number
+                            type: string
+                            x-go-name: Code
+                        message:
+                            description: document type 'SSN' not allowed | invalid document number for type 'CPF'
+                            type: string
+                            x-go-name: Message
+                        type:
+                            description: business_rule
+                            type: string
+                            x-go-name: Type
+                    type: object
+                    x-go-name: Error
+            type: object
+    OpenAccountValidationError:
+        description: ""
+        schema:
+            properties:
+                error:
+                    properties:
+                        code:
+                            description: The error code
+                            example: malformed_open_account_request
+                            type: string
+                            x-go-name: Code
+                        details:
+                            description: Details of error
+                            example:
+                                - missing document_type field
+                                - document_number must be a string
+                            items:
+                                type: string
+                            type: array
+                            x-go-name: Details
+                        message:
+                            description: the error message
+                            example: malformed open account request, check details
+                            type: string
+                            x-go-name: Message
+                        type:
+                            description: the error type
+                            example: validation
+                            type: string
+                            x-go-name: Type
+                    type: object
+                    x-go-name: Error
+            type: object
+    SaveTransactionBusinessRuleError:
+        description: ""
+        schema:
+            properties:
+                error:
+                    example:
+                        code: account_not_exists
+                        message: account with id '6544' not exists
+                        type: business_rule
+                    properties:
+                        code:
+                            description: account_not_exists | invalid_operation_type | positive_amount | negative_amount
+                            type: string
+                            x-go-name: Code
+                        message:
+                            description: account with id '6544' not exists | invalid operation type id '8' | amount must be negative for operation type id '1' | amount must be positive for operation type id '4'
+                            type: string
+                            x-go-name: Message
+                        type:
+                            description: business_rule
+                            type: string
+                            x-go-name: Type
+                    type: object
+                    x-go-name: Error
+            type: object
+    SaveTransactionValidationError:
+        description: ""
+        schema:
+            properties:
+                error:
+                    properties:
+                        code:
+                            description: The error code
+                            example: malformed_save_transaction_request
+                            type: string
+                            x-go-name: Code
+                        details:
+                            description: Details of error
+                            example:
+                                - missing account_id field
+                                - missing operation_type_id field
+                                - missing amount field
+                            items:
+                                type: string
+                            type: array
+                            x-go-name: Details
+                        message:
+                            description: the error message
+                            example: malformed save transaction request, check details
+                            type: string
+                            x-go-name: Message
+                        type:
+                            description: the error type
+                            example: validation
+                            type: string
+                            x-go-name: Type
+                    type: object
+                    x-go-name: Error
+            type: object
+schemes:
+    - http
+    - https
+swagger: "2.0"
