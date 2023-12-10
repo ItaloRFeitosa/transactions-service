@@ -4,7 +4,7 @@
 erDiagram
     accounts ||--o{ transactions : contains
     accounts {
-        *pk account_id
+        bigserial account_id
         varchar document_type
         varchar document_number
         timestamptz created_at
@@ -12,8 +12,8 @@ erDiagram
         timestamptz deleted_at
     }
     transactions {
-        *pk transaction_id
-        *fk account_id
+        bigserial transaction_id
+        bigint account_id
         smallint operation_type_id
         bigint amount
         timestamptz created_at
