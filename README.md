@@ -29,7 +29,7 @@ After running the app, you can access the [swagger page](http://localhost:8080/s
 
 Also, you can use the `/docs/api.http` to interact with the api, but install the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) vscode extension beforehand.
 
-Inside `/docs` there are content about the capabilities of application, with diagrams and decision records.
+Inside `/docs` there are content about the capabilities of application, with diagrams and decision records. (Open in github itself, so the diagrams can be rendered)
 
 ## How To Test
 ```
