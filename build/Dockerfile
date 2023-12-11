@@ -13,9 +13,12 @@ RUN make build
 
 FROM alpine:3.18
 
-COPY --from=build /app/out/api /app/api
+WORKDIR /app
+COPY --from=build /app/out/api /app/out/api
+COPY --from=build /app/tools/migrations /app/tools/migrations
+COPY --from=build /app/api/swagger /app/api/swagger
 RUN apk add ca-certificates
 
 EXPOSE 8080
 
-ENTRYPOINT ["/app/api"]
+ENTRYPOINT ["/app/out/api"]

@@ -10,12 +10,12 @@ type OpenAccountRequest struct {
 	//
 	// Required: true
 	// example: CPF
-	DocumentType string `json:"document_type"`
+	DocumentType string `json:"document_type" binding:"required"`
 	// Document Number, should be valid for given document_type
 	//
 	// required: true
 	// example: 62558363042
-	DocumentNumber string `json:"document_number"`
+	DocumentNumber string `json:"document_number" binding:"required"`
 }
 
 // swagger:model

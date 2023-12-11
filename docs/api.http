@@ -1,3 +1,115 @@
 ### get /health
 GET http://localhost:8080/health
 Content-Type: application/json
+
+### post /api/v1/accounts - Success
+POST http://localhost:8080/api/v1/accounts
+Content-Type: application/json
+
+{
+    "document_type": "CPF",
+    "document_number": "05967545310"
+}
+
+### post /api/v1/accounts - 400
+POST http://localhost:8080/api/v1/accounts
+Content-Type: application/json
+
+{
+
+}
+
+### post /api/v1/accounts - 422 - wrong type
+POST http://localhost:8080/api/v1/accounts
+Content-Type: application/json
+
+{
+    "document_type": "SSN",
+    "document_number": "51968XXXX"
+}
+
+### post /api/v1/accounts - 422 - invalid document number
+POST http://localhost:8080/api/v1/accounts
+Content-Type: application/json
+
+{
+    "document_type": "CNPJ",
+    "document_number": "11111111111111"
+}
+
+### get /api/v1/accounts/{accountID} - Success
+GET http://localhost:8080/api/v1/accounts/1
+Content-Type: application/json
+
+### get /api/v1/accounts/{accountID} - invalid id
+GET http://localhost:8080/api/v1/accounts/aaa
+Content-Type: application/json
+
+### post /api/v1/transactions - Success
+POST http://localhost:8080/api/v1/transactions
+Content-Type: application/json
+
+{
+  "account_id": 1,
+  "amount": -20000,
+  "operation_type_id": 3
+}
+
+### post /api/v1/transactions - Success
+POST http://localhost:8080/api/v1/transactions
+Content-Type: application/json
+
+{
+  "account_id": 1,
+  "amount": 20000,
+  "operation_type_id": 4
+}
+
+### post /api/v1/transactions - negative amount
+POST http://localhost:8080/api/v1/transactions
+Content-Type: application/json
+
+{
+  "account_id": 1,
+  "amount": -20000,
+  "operation_type_id": 4
+}
+
+### post /api/v1/transactions - invalid operation type
+POST http://localhost:8080/api/v1/transactions
+Content-Type: application/json
+
+{
+  "account_id": 1,
+  "amount": -20000,
+  "operation_type_id": 5
+}
+
+### post /api/v1/transactions - invalid operation type
+POST http://localhost:8080/api/v1/transactions
+Content-Type: application/json
+
+{
+  "account_id": 1,
+  "amount": -20000,
+  "operation_type_id": -1
+}
+
+### post /api/v1/transactions - account not exists
+POST http://localhost:8080/api/v1/transactions
+Content-Type: application/json
+
+{
+  "account_id": 99999,
+  "amount": 20000,
+  "operation_type_id": 4
+}
+
+
+### post /api/v1/transactions - 400
+POST http://localhost:8080/api/v1/transactions
+Content-Type: application/json
+
+{
+
+}

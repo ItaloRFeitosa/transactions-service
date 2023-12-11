@@ -11,6 +11,6 @@ type Handlers struct {
 func provideHandlers(c *Container) {
 	c.Handlers = new(Handlers)
 	c.Handlers.Health = new(handler.Health)
-	c.Handlers.Transaction = new(handler.Transaction)
-	c.Handlers.Account = new(handler.Account)
+	c.Handlers.Transaction = handler.NewTransaction(c.UseCases.Transaction)
+	c.Handlers.Account = handler.NewAccount(c.UseCases.Account)
 }

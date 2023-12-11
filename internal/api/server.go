@@ -19,6 +19,7 @@ func ListenServer(container *config.Container) func(context.Context) error {
 	engine.Use(gin.Recovery())
 	engine.Use(middleware.RequestID)
 	engine.Use(middleware.Logger)
+	engine.Use(middleware.Error)
 
 	container.Handlers.Health.Register(engine)
 	routerv1 := engine.Group("/api/v1")

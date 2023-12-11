@@ -1,7 +1,5 @@
 package model
 
-import "github.com/italorfeitosa/transactions-service/pkg/errs"
-
 // swagger:model
 type HealthResponse struct {
 	Data Health `json:"data"`
@@ -10,11 +8,6 @@ type HealthResponse struct {
 // swagger:model
 type Health struct {
 	Success bool `json:"success"`
-}
-
-// swagger:model
-type ErrorResponse struct {
-	Error errs.Error `json:"error"`
 }
 
 // swagger:response

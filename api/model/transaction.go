@@ -8,17 +8,17 @@ type SaveTransactionRequest struct {
 	//
 	// Required: true
 	// Example: 6541
-	AccountID int `json:"account_id"`
+	AccountID int `json:"account_id" binding:"required"`
 	// Operation Type ID: 1 (Purchase) - 2 (Purchase In Installments) - 3 (Withdraw) - 4(Payment)
 	//
 	// Required: true
 	// Example: 1
-	OperationTypeID int `json:"operation_type_id"`
+	OperationTypeID int `json:"operation_type_id" binding:"required"`
 	// Amount in cents must be positive when OperationTypeID == 4, otherwise is negative
 	//
 	// Required: true
 	// Example: -20000
-	Amount int `json:"amount"`
+	Amount int `json:"amount" binding:"required"`
 }
 
 // swagger:model
