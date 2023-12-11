@@ -47,3 +47,6 @@ prodlike_destroy:
 
 swagger:
 	docker run --rm -it  --user $(shell id -u):$(shell id -g) -e GOCACHE=/tmp -e GOPATH=$(shell go env GOPATH):/go -v $(HOME):$(HOME) -w $(PWD) quay.io/goswagger/swagger generate spec -m -o ./api/swagger/swagger.yml
+
+unit_test:
+	go test ./... -short -v
