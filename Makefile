@@ -33,6 +33,9 @@ local_build:
 local_logs:
 	$(MAKE) logs compose_project_name=${LOCAL_PROJECT_NAME} compose_file=$(LOCAL_COMPOSE_FILE)
 
+local_stop:
+	$(MAKE) stop compose_project_name=${LOCAL_PROJECT_NAME} compose_file=$(LOCAL_COMPOSE_FILE)
+
 local_destroy:
 	$(MAKE) destroy compose_project_name=${LOCAL_PROJECT_NAME} compose_file=$(LOCAL_COMPOSE_FILE)
 
