@@ -11,6 +11,10 @@ func NewAccountUseCase(accountDAO AccountDAO) *accountUseCase {
 }
 
 func (a *accountUseCase) OpenAccount(ctx context.Context, input OpenAccountInput) (AccountDTO, error) {
+	if input.AvailableCreditLimit < 1 {
+		return AccountDTO{}, ErrNonPositiveAvailableCreditLimit
+	}
+
 	if err := ValidateDocument(input.DocumentType, input.DocumentNumber); err != nil {
 		return AccountDTO{}, err
 	}

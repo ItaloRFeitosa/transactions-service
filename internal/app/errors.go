@@ -30,4 +30,16 @@ var (
 	ErrNegativeAmount = errs.Builder().BusinessRule().
 				WithCode("negative_amount").
 				WithTemplate("amount must be positive for operation type id '%d'")
+
+	ErrNonPositiveAvailableCreditLimit = errs.Builder().BusinessRule().
+						WithCode("non_positive_available_credit_limit").
+						WithMessage("available credit limit must be positive")
+
+	ErrNoCreditLimit = errs.Builder().BusinessRule().
+				WithCode("no_credit_limit").
+				WithTemplate("no credit limit, current limit: %d")
+
+	ErrOldAccountState = errs.Builder().Conflict().
+				WithCode("old_account_state").
+				WithTemplate("old account state, please try again")
 )

@@ -12,19 +12,23 @@ type AccountUseCase interface {
 
 type AccountDAO interface {
 	Insert(context.Context, OpenAccountInput) (AccountDTO, error)
+	SensibilizeTransactionToAccount(context.Context, AccountDTO, SaveTransactionInput) (TransactionDTO, error)
 	Get(ctx context.Context, accountID int) (AccountDTO, error)
 	Exists(ctx context.Context, accountID int) (bool, error)
 }
 
 type OpenAccountInput struct {
-	DocumentType   string
-	DocumentNumber string
+	DocumentType         string
+	DocumentNumber       string
+	AvailableCreditLimit int
 }
 
 type AccountDTO struct {
-	AccountID      int
-	DocumentType   string
-	DocumentNumber string
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	AccountID            int
+	DocumentType         string
+	DocumentNumber       string
+	AvailableCreditLimit int
+	Version              int
+	CreatedAt            time.Time
+	UpdatedAt            time.Time
 }
