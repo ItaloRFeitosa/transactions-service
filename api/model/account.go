@@ -16,6 +16,8 @@ type OpenAccountRequest struct {
 	// required: true
 	// example: 62558363042
 	DocumentNumber string `json:"document_number" binding:"required"`
+
+	AvailableCreditLimit int `json:"available_credit_limit" binding:"required"`
 }
 
 // swagger:model
@@ -33,7 +35,10 @@ type Account struct {
 	DocumentType string `json:"document_type"`
 	// Document Number, should be valid for given document_type
 	// example: 62558363042
-	DocumentNumber string    `json:"document_number"`
-	CreatedAt      time.Time `json:"created_at"`
-	UpdatedAt      time.Time `json:"updated_at"`
+	DocumentNumber string `json:"document_number"`
+
+	AvailableCreditLimit int `json:"available_credit_limit"`
+
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
