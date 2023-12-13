@@ -8,7 +8,8 @@ Content-Type: application/json
 
 {
     "document_type": "CPF",
-    "document_number": "05967545310"
+    "document_number": "05967545310",
+    "available_credit_limit": 5000
 }
 
 ### post /api/v1/accounts - 400
@@ -51,7 +52,7 @@ Content-Type: application/json
 
 {
   "account_id": 1,
-  "amount": -20000,
+  "amount": -500,
   "operation_type_id": 3
 }
 
@@ -61,8 +62,8 @@ Content-Type: application/json
 
 {
   "account_id": 1,
-  "amount": 20000,
-  "operation_type_id": 4
+  "amount": -2000,
+  "operation_type_id": 1
 }
 
 ### post /api/v1/transactions - negative amount
