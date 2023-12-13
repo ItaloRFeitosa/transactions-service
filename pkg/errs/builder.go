@@ -9,6 +9,7 @@ type BuilderType interface {
 	NotFound() BuilderCode
 	Internal() BuilderCode
 	BusinessRule() BuilderCode
+	Conflict() BuilderCode
 }
 
 type BuilderCode interface {
@@ -39,6 +40,10 @@ func New() Error {
 
 func (e Error) Validation() BuilderCode {
 	return e.withType(ValidationType)
+}
+
+func (e Error) Conflict() BuilderCode {
+	return e.withType(ConflictType)
 }
 
 func (e Error) BusinessRule() BuilderCode {

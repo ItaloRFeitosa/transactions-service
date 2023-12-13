@@ -7,6 +7,7 @@ var statusCodeMap = map[Type]int{
 	NotFoundType:     http.StatusNotFound,
 	ValidationType:   http.StatusBadRequest,
 	BusinessRuleType: http.StatusUnprocessableEntity,
+	ConflictType:     http.StatusConflict,
 }
 
 func ToHttpError(err error) HttpError {
