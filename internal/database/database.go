@@ -21,7 +21,11 @@ func Close(db *sqlx.DB) error {
 	return db.DB.Close()
 }
 
-func insertReturningID(ctx context.Context, db *sqlx.DB, query string, arg any) (int, error) {
+type sqlxDB interface {
+	PrepareNamedContext(ctx context.Context, query string) (*sqlx.NamedStmt, error)
+}
+
+func insertReturningID(ctx context.Context, db sqlxDB, query string, arg any) (int, error) {
 	var id int
 
 	stmt, err := db.PrepareNamedContext(ctx, query)
