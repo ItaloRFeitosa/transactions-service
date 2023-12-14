@@ -41,5 +41,5 @@ var (
 
 	ErrOldAccountState = errs.Builder().Conflict().
 				WithCode("old_account_state").
-				WithTemplate("old account state, please try again")
+				WithMessage("old account state, please try again")
 )

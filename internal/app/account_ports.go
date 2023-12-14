@@ -12,7 +12,6 @@ type AccountUseCase interface {
 
 type AccountDAO interface {
 	Insert(context.Context, OpenAccountInput) (AccountDTO, error)
-	SensibilizeTransactionToAccount(context.Context, AccountDTO, SaveTransactionInput) (TransactionDTO, error)
 	Get(ctx context.Context, accountID int) (AccountDTO, error)
 	Exists(ctx context.Context, accountID int) (bool, error)
 }

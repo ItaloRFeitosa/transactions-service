@@ -1,6 +1,9 @@
 package app
 
-import "context"
+import (
+	"context"
+	"errors"
+)
 
 type transactionUseCase struct {
 	transactionDAO TransactionDAO
@@ -17,6 +20,10 @@ func (a *transactionUseCase) SaveTransaction(ctx context.Context, input SaveTran
 	}
 
 	account, err := a.accountDAO.Get(ctx, input.AccountID)
+	if errors.Is(err, ErrAccountNotFound) {
+		return TransactionDTO{}, ErrAccountNotExists.WithArgs(input.AccountID)
+	}
+
 	if err != nil {
 		return TransactionDTO{}, err
 	}
@@ -27,7 +34,11 @@ func (a *transactionUseCase) SaveTransaction(ctx context.Context, input SaveTran
 		return TransactionDTO{}, ErrNoCreditLimit.WithArgs(account.AvailableCreditLimit)
 	}
 
-	account.AvailableCreditLimit = newCreditLimit
-
-	return a.accountDAO.SensibilizeTransactionToAccount(ctx, account, input)
+	return a.transactionDAO.Insert(ctx, InsertTransactionData{
+		AccountID:               account.AccountID,
+		ExpectedAccountVersion:  account.Version,
+		NewAvailableCreditLimit: newCreditLimit,
+		OperationTypeID:         input.OperationTypeID,
+		Amount:                  input.Amount,
+	})
 }
