@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	insertAccountQuery = `insert into accounts (document_type, document_number, created_at, updated_at, deleted_at) 
-	values (:document_type, :document_number, :created_at, :updated_at, :deleted_at) returning account_id;`
+	insertAccountQuery = `insert into accounts (document_type, document_number, available_credit_limit, created_at, updated_at, deleted_at) 
+	values (:document_type, :document_number, :available_credit_limit, :created_at, :updated_at, :deleted_at) returning account_id;`
 
 	getAccountQuery    = "select * from accounts where account_id = $1 order by account_id asc limit 1;"
 	existsAccountQuery = "select exists (select 1 from accounts where account_id = $1 order by account_id asc limit 1);"
@@ -30,10 +30,11 @@ func (dao *accountDAO) Insert(ctx context.Context, input app.OpenAccountInput) (
 	var err error
 
 	accountModel := AccountModel{
-		DocumentType:   input.DocumentType,
-		DocumentNumber: input.DocumentNumber,
-		CreatedAt:      time.Now(),
-		UpdatedAt:      time.Now(),
+		DocumentType:         input.DocumentType,
+		DocumentNumber:       input.DocumentNumber,
+		AvailableCreditLimit: input.AvailableCreditLimit,
+		CreatedAt:            time.Now(),
+		UpdatedAt:            time.Now(),
 	}
 
 	accountModel.AccountID, err = insertReturningID(ctx, dao.db, insertAccountQuery, accountModel)

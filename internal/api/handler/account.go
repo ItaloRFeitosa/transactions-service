@@ -52,8 +52,9 @@ func (a *Account) OpenAccount(c *gin.Context) {
 	}
 
 	account, err := a.accountUseCase.OpenAccount(c.Request.Context(), app.OpenAccountInput{
-		DocumentType:   req.DocumentType,
-		DocumentNumber: req.DocumentNumber,
+		DocumentType:         req.DocumentType,
+		DocumentNumber:       req.DocumentNumber,
+		AvailableCreditLimit: req.AvailableCreditLimit,
 	})
 
 	if err != nil {
@@ -63,11 +64,12 @@ func (a *Account) OpenAccount(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, model.AccountResponse{
 		Data: model.Account{
-			AccountID:      account.AccountID,
-			DocumentType:   account.DocumentType,
-			DocumentNumber: account.DocumentNumber,
-			CreatedAt:      account.CreatedAt,
-			UpdatedAt:      account.UpdatedAt,
+			AccountID:            account.AccountID,
+			DocumentType:         account.DocumentType,
+			DocumentNumber:       account.DocumentNumber,
+			AvailableCreditLimit: account.AvailableCreditLimit,
+			CreatedAt:            account.CreatedAt,
+			UpdatedAt:            account.UpdatedAt,
 		},
 	})
 }
@@ -108,11 +110,12 @@ func (a *Account) GetAccount(c *gin.Context) {
 
 	c.JSON(http.StatusOK, model.AccountResponse{
 		Data: model.Account{
-			AccountID:      account.AccountID,
-			DocumentType:   account.DocumentType,
-			DocumentNumber: account.DocumentNumber,
-			CreatedAt:      account.CreatedAt,
-			UpdatedAt:      account.UpdatedAt,
+			AccountID:            account.AccountID,
+			DocumentType:         account.DocumentType,
+			DocumentNumber:       account.DocumentNumber,
+			AvailableCreditLimit: account.AvailableCreditLimit,
+			CreatedAt:            account.CreatedAt,
+			UpdatedAt:            account.UpdatedAt,
 		},
 	})
 }

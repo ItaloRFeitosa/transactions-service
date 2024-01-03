@@ -17,14 +17,17 @@ type AccountDAO interface {
 }
 
 type OpenAccountInput struct {
-	DocumentType   string
-	DocumentNumber string
+	DocumentType         string
+	DocumentNumber       string
+	AvailableCreditLimit int
 }
 
 type AccountDTO struct {
-	AccountID      int
-	DocumentType   string
-	DocumentNumber string
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	AccountID            int
+	DocumentType         string
+	DocumentNumber       string
+	AvailableCreditLimit int
+	Version              int
+	CreatedAt            time.Time
+	UpdatedAt            time.Time
 }
